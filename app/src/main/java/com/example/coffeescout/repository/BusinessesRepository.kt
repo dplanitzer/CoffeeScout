@@ -9,13 +9,16 @@ import com.apollographql.apollo.api.ApolloResponse
 import com.apollographql.apollo.api.Operation
 import com.apollographql.apollo.interceptor.ApolloInterceptor
 import com.apollographql.apollo.interceptor.ApolloInterceptorChain
+import com.apollographql.apollo.network.okHttpClient
 import com.example.coffeescout.BuildConfig
 import com.example.coffeescout.GetBusinessesQuery
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.runBlocking
+import okhttp3.Interceptor
+import okhttp3.OkHttpClient
 
 // A repository that offers API to query for businesses close to a user defined address.
-class BusinessesRepository(private val graphQlUrl: String) {
+class BusinessesRepository(private val graphQlUrl: String, interceptor: Interceptor? = null) {
 
     // The result of a queryBusinessesSync() call
     data class QueryResult(val totalCount: Int, val businesses: List<Business>)
@@ -33,10 +36,21 @@ class BusinessesRepository(private val graphQlUrl: String) {
         }
     }
 
+    private fun buildOkHttpClient(interceptor: Interceptor?): OkHttpClient {
+        return if (interceptor != null) {
+            OkHttpClient.Builder()
+                .addInterceptor(interceptor)
+                .build()
+        } else {
+            OkHttpClient.Builder()
+                .build()
+        }
+    }
 
     private val client: ApolloClient = ApolloClient.Builder()
         .serverUrl(graphQlUrl)
         .addInterceptor(AuthInterceptor())
+        .okHttpClient(buildOkHttpClient(interceptor))
         .build()
 
     private val lock = Object()
