@@ -1,0 +1,37 @@
+query GetBusinessesQuery($location: String!, $categories: String!, $offset: Int!, $limit: Int!, $sortby: String!) {
+  search(
+    location: $location
+    categories: $categories
+    offset: $offset
+    limit: $limit
+    sort_by: $sortby
+  ) {
+    total
+    business {
+      distance
+      hours {
+        is_open_now
+        open {
+          day
+          end
+          start
+        }
+      }
+      location {
+        address1
+        city
+      }
+	  coordinates {
+	    latitude
+		longitude
+	  }
+      name
+      photos
+      price
+      rating
+      review_count
+      url
+      id
+    }
+  }
+}
