@@ -1,6 +1,8 @@
+//
+// Copyright 2025, Dietmar Planitzer
+//
 package com.example.coffeescout.repository
 
-import com.example.coffeescout.BuildConfig
 import okhttp3.Interceptor
 import okhttp3.MediaType.Companion.toMediaType
 import okhttp3.Protocol
