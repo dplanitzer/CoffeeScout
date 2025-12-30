@@ -14,7 +14,7 @@ import androidx.core.view.isVisible
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.RecyclerView
 import com.example.coffeescout.repository.Business
-import com.example.coffeescout.repository.BusinessesRepository
+import com.example.coffeescout.repository.createBusinessRepository
 import java.time.format.DateTimeFormatter
 import java.time.format.FormatStyle
 
@@ -27,7 +27,6 @@ class MainActivity : AppCompatActivity() {
         const val INITIAL_LOAD_SIZE = 10
         const val LOAD_SIZE = 10
 
-        const val YELP_GRAPHQL_URL = "https://api.yelp.com/v3/graphql"
         const val YELP_URL = "https://www.yelp.com"
     }
 
@@ -51,7 +50,7 @@ class MainActivity : AppCompatActivity() {
 
 
         // Create the businesses repository and view model
-        val repository = BusinessesRepository(YELP_GRAPHQL_URL)
+        val repository = createBusinessRepository()
         viewModel = ViewModelProvider(this, MainViewModelFactory(
             repository,
             USER_ADDRESS,
