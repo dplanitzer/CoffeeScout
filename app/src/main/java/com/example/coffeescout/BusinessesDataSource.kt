@@ -8,6 +8,7 @@ import androidx.paging.PagingSource
 import androidx.paging.PagingState
 import com.example.coffeescout.repository.Business
 import com.example.coffeescout.repository.BusinessesRepository
+import kotlin.math.max
 
 class BusinessesDataSource(
     private val repository: BusinessesRepository,
@@ -21,8 +22,8 @@ class BusinessesDataSource(
         return try {
             val offset = params.key ?: 0
             val qr = repository.queryBusinessesSync(userAddress, category, sortBy, offset, params.loadSize)
-            val prevKey = if (offset > 0) offset - params.loadSize else null
-            val nextKey = if (qr.totalCount >= params.loadSize) offset + params.loadSize else null
+            val prevKey = if (offset > 0) max(offset - params.loadSize, 0) else null
+            val nextKey = if (offset + qr.businesses.size < qr.totalCount) offset + qr.businesses.size else null
 
             LoadResult.Page(
                 data = qr.businesses,
