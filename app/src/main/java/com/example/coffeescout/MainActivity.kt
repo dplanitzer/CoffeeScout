@@ -74,12 +74,6 @@ class MainActivity : AppCompatActivity() {
         // Observe changes in the view model and act on them
         lifecycleScope.launch {
             viewModel.businessFlow
-                // Any transformations after the ViewModel's cachedIn step will not be cached,
-                // and will instead by re-run immediately on Activity re-creation.
-               // .map { pagingData ->
-               //     // example un-cached transformation
-               //     pagingData.map { UiModel(it) }
-               // }
                 .collectLatest {
                     businessesAdapter.submitData(it)
                 }
