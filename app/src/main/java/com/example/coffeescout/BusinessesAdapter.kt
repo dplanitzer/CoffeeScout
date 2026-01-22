@@ -14,7 +14,7 @@ import android.view.ViewGroup
 import android.widget.Button
 import android.widget.ImageView
 import android.widget.TextView
-import androidx.paging.PagedListAdapter
+import androidx.paging.PagingDataAdapter
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import coil.load
@@ -44,7 +44,7 @@ class BusinessesAdapter(
     private val metersFormatter: MeasureFormat,
     private val kilometersFormatter: MeasureFormat,
     private val actionHandler: BusinessCardActionCallback
-) : PagedListAdapter<Business, BusinessesAdapter.ViewHolder>(DIFFER) {
+) : PagingDataAdapter<Business, BusinessesAdapter.ViewHolder>(DIFFER) {
 
     companion object {
         private val DIFFER = object :

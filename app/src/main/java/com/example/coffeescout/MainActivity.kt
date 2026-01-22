@@ -12,9 +12,14 @@ import android.widget.LinearLayout
 import android.widget.TextView
 import androidx.core.view.isVisible
 import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.lifecycleScope
+import androidx.paging.LoadState
 import androidx.recyclerview.widget.RecyclerView
 import com.example.coffeescout.repository.Business
 import com.example.coffeescout.repository.createBusinessRepository
+import kotlinx.coroutines.flow.collectLatest
+import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.launch
 import java.time.format.DateTimeFormatter
 import java.time.format.FormatStyle
 
@@ -67,14 +72,27 @@ class MainActivity : AppCompatActivity() {
 
 
         // Observe changes in the view model and act on them
-        viewModel.liveData.observe(this) {
-            businessesAdapter.submitList(it)
+        lifecycleScope.launch {
+            viewModel.businessFlow
+                // Any transformations after the ViewModel's cachedIn step will not be cached,
+                // and will instead by re-run immediately on Activity re-creation.
+               // .map { pagingData ->
+               //     // example un-cached transformation
+               //     pagingData.map { UiModel(it) }
+               // }
+                .collectLatest {
+                    businessesAdapter.submitData(it)
+                }
         }
-        viewModel.liveError.observe(this) {
-            if (it == null) {
-                setErrorViewVisible(false)
-            } else {
-                showErrorMessage(resources.getString(R.string.network_error_msg))
+
+        businessesAdapter.addLoadStateListener { loadState ->
+            when (loadState.refresh) {
+                is LoadState.Error -> {
+                    showErrorMessage(resources.getString(R.string.network_error_msg))
+                }
+                else -> {
+                    setErrorViewVisible(false)
+                }
             }
         }
     }

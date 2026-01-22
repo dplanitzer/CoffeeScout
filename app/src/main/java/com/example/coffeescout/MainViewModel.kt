@@ -3,13 +3,12 @@
 //
 package com.example.coffeescout
 
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
-import androidx.paging.LivePagedListBuilder
-import androidx.paging.PagedList
-import com.example.coffeescout.repository.Business
+import androidx.lifecycle.viewModelScope
+import androidx.paging.Pager
+import androidx.paging.PagingConfig
+import androidx.paging.cachedIn
 import com.example.coffeescout.repository.BusinessesRepository
 
 // A view model which stores the result of running a (paged) query for businesses:
@@ -24,41 +23,27 @@ class MainViewModel(
     loadSize: Int
 ) : ViewModel() {
 
+    private val source = BusinessesDataSource(repository, userAddress, category, sortBy)
+
     // Observe this to get the businesses
-    val liveData: LiveData<PagedList<Business>>
-
-    // Observe this to get the current error state
-    private val _liveError = MutableLiveData<Exception?>(null)
-    val liveError: LiveData<Exception?> = _liveError
-
-
-    init {
-
-        val pagedListConfig = PagedList.Config.Builder()
-            .setEnablePlaceholders(false)
-            .setPrefetchDistance(loadSize)
-            .setInitialLoadSizeHint(initialLoadSize)
-            .setPageSize(loadSize)
-            .build()
-
-        val factory = BusinessesDataSourceFactory(repository, userAddress, category, sortBy)
-        liveData = LivePagedListBuilder(factory, pagedListConfig)
-            .setBoundaryCallback(object : PagedList.BoundaryCallback<Business>() {
-                override fun onZeroItemsLoaded() {
-                    // If mostRecentError != null -> app will show an error view
-                    // If mostRecentError == null -> app will show an empty recycler view (we legitimately didn't receive any data from the server)
-                    _liveError.value = repository.mostRecentError
-                }
-            })
-            .build()
-    }
+    val businessFlow = Pager(
+        // Configure how data is loaded by passing additional properties to
+        // PagingConfig, such as prefetchDistance.
+        PagingConfig(
+            enablePlaceholders = false,
+            pageSize = loadSize,
+            prefetchDistance = loadSize,
+            initialLoadSize = initialLoadSize
+        )
+    ) {
+        source
+    }.flow
+        .cachedIn(viewModelScope)
 
     // Reset the state of the view model. This throws all saved data away and restarts the data
     // stream from scratch.
     fun invalidate() {
-
-        _liveError.value = null
-        liveData.value?.dataSource?.invalidate()
+        source.invalidate()
     }
 }
 
