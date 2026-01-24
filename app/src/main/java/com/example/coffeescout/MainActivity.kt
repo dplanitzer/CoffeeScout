@@ -3,8 +3,6 @@
 //
 package com.example.coffeescout
 
-import android.icu.text.MeasureFormat
-import android.icu.text.NumberFormat
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.widget.Button
@@ -18,10 +16,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.coffeescout.repository.Business
 import com.example.coffeescout.repository.createBusinessRepository
 import kotlinx.coroutines.flow.collectLatest
-import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.launch
-import java.time.format.DateTimeFormatter
-import java.time.format.FormatStyle
 
 class MainActivity : AppCompatActivity() {
 
@@ -44,16 +39,6 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
-        // Create formatters for showing hours & minutes, meters and kilometers
-        val curLocale = resources.configuration.locales[0]
-        val timeFormatter = DateTimeFormatter.ofLocalizedTime(FormatStyle.SHORT)
-        val metersFormatter = MeasureFormat.getInstance(curLocale, MeasureFormat.FormatWidth.NARROW, NumberFormat.getIntegerInstance(curLocale))
-        val kilometersNumberFormatter = NumberFormat.getNumberInstance(curLocale)
-        kilometersNumberFormatter.minimumFractionDigits = 0
-        kilometersNumberFormatter.maximumFractionDigits = 1
-        val kilometersFormatter = MeasureFormat.getInstance(curLocale, MeasureFormat.FormatWidth.NARROW, kilometersNumberFormatter)
-
-
         // Create the businesses repository and view model
         val repository = createBusinessRepository()
         viewModel = ViewModelProvider(this, MainViewModelFactory(
@@ -66,8 +51,12 @@ class MainActivity : AppCompatActivity() {
         )[MainViewModel::class.java]
 
 
+        // Create formatters for showing hours & minutes, meters and kilometers
+        val businessFormatter = BusinessFormatter(resources)
+
+
         // Create the businesses adapter for the recycle view
-        businessesAdapter = BusinessesAdapter(timeFormatter, metersFormatter, kilometersFormatter, this::onBusinessCardAction)
+        businessesAdapter = BusinessesAdapter(businessFormatter, this::onBusinessCardAction)
         findViewById<RecyclerView>(R.id.recycler_view).adapter = businessesAdapter
 
 

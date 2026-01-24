@@ -1,9 +1,6 @@
 package com.example.coffeescout
 
 import android.content.res.Configuration
-import android.icu.text.MeasureFormat
-import android.icu.text.NumberFormat
-import android.icu.util.MeasureUnit
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
@@ -24,6 +21,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalConfiguration
+import androidx.compose.ui.platform.LocalResources
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
@@ -32,15 +30,9 @@ import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import androidx.core.os.ConfigurationCompat
 import coil.compose.AsyncImage
 import com.example.coffeescout.repository.Business
 import java.time.DayOfWeek
-import java.time.LocalDate
-import java.time.LocalTime
-import java.time.format.DateTimeFormatter
-import java.time.format.FormatStyle
-import java.util.Locale
 
 
 // The actions that a user might trigger by tapping on the various buttons in a card
@@ -59,36 +51,28 @@ typealias BusinessCardActionCallback = (BusinessCardAction, Business) -> Unit
 
 @Composable
 fun BusinessCardHolder(business: Business,
-                       timeFormatter: DateTimeFormatter,
-                       metersFormatter: MeasureFormat,
-                       kilometersFormatter: MeasureFormat,
+                       businessFormatter: BusinessFormatter,
                        actionHandler: BusinessCardActionCallback
 ) {
 
-    BusinessCard(business, timeFormatter, metersFormatter, kilometersFormatter, actionHandler)
+    BusinessCard(business, businessFormatter, actionHandler)
 }
 
 @Composable
 fun BusinessCard(b: Business,
-                 timeFormatter: DateTimeFormatter,
-                 metersFormatter: MeasureFormat,
-                 kilometersFormatter: MeasureFormat,
+                 businessFormatter: BusinessFormatter,
                  actionHandler: BusinessCardActionCallback
 ) {
     if (LocalConfiguration.current.orientation == Configuration.ORIENTATION_LANDSCAPE) {
         LandscapeCard(
             b,
-            timeFormatter,
-            metersFormatter,
-            kilometersFormatter,
+            businessFormatter,
             actionHandler
         )
     } else {
         PortraitCard(
             b,
-            timeFormatter,
-            metersFormatter,
-            kilometersFormatter,
+            businessFormatter,
             actionHandler
         )
     }
@@ -96,9 +80,7 @@ fun BusinessCard(b: Business,
 
 @Composable
 private fun PortraitCard(b: Business,
-                         timeFormatter: DateTimeFormatter,
-                         metersFormatter: MeasureFormat,
-                         kilometersFormatter: MeasureFormat,
+                         businessFormatter: BusinessFormatter,
                          actionHandler: BusinessCardActionCallback
 ) {
     Column(
@@ -121,9 +103,7 @@ private fun PortraitCard(b: Business,
 
         InfoBlock(
             b,
-            timeFormatter,
-            metersFormatter,
-            kilometersFormatter,
+            businessFormatter,
             actionHandler
         )
     }
@@ -131,9 +111,7 @@ private fun PortraitCard(b: Business,
 
 @Composable
 private fun LandscapeCard(b: Business,
-                          timeFormatter: DateTimeFormatter,
-                          metersFormatter: MeasureFormat,
-                          kilometersFormatter: MeasureFormat,
+                          businessFormatter: BusinessFormatter,
                           actionHandler: BusinessCardActionCallback
 ) {
     Row(
@@ -162,9 +140,7 @@ private fun LandscapeCard(b: Business,
         ) {
             InfoBlock(
                 b,
-                timeFormatter,
-                metersFormatter,
-                kilometersFormatter,
+                businessFormatter,
                 actionHandler
             )
         }
@@ -173,9 +149,7 @@ private fun LandscapeCard(b: Business,
 
 @Composable
 private fun InfoBlock(b: Business,
-                      timeFormatter: DateTimeFormatter,
-                      metersFormatter: MeasureFormat,
-                      kilometersFormatter: MeasureFormat,
+                      businessFormatter: BusinessFormatter,
                       actionHandler: BusinessCardActionCallback
 ) {
     Text(
@@ -206,7 +180,7 @@ private fun InfoBlock(b: Business,
         YelpRatingBar(b.rating)
 
         Text(
-            text = formatBusinessInfo(b, metersFormatter, kilometersFormatter),
+            text = businessFormatter.formatInfo(b, stringResource(R.string.bar_sep)),
             color = Color.DarkGray,
             modifier = Modifier
                 .fillMaxWidth()
@@ -227,7 +201,7 @@ private fun InfoBlock(b: Business,
                 append(stringResource(if (b.hours.isOpenNow) R.string.business_open else R.string.business_closed))
             }
 
-            val openingTimesString = formatOpeningTimes(b.hours.openingTimes, timeFormatter)
+            val openingTimesString = businessFormatter.formatOpeningTimes(b.hours.openingTimes, stringResource(R.string.dash_sep))
             if (openingTimesString.isNotEmpty()) {
                 append(stringResource(R.string.bullet_sep))
                 append(openingTimesString)
@@ -281,83 +255,11 @@ private fun InfoBlock(b: Business,
 }
 
 
-// Returns a formatted string with the review count, pricing level and distance
-@Composable
-private fun formatBusinessInfo(b: Business, metersFormatter: MeasureFormat, kilometersFormatter: MeasureFormat): String {
-
-    val buf = java.lang.StringBuilder()
-    val barSep = stringResource(R.string.bar_sep)
-
-    // (optional) review count
-    if (b.reviewCount > 0) {
-        buf.append(stringResource(R.string.reviews_count_format, b.reviewCount))
-    }
-
-
-    // (optional) pricing level
-    if (b.displayPricingLevel.isNotEmpty()) {
-        if (buf.isNotEmpty()) {
-            buf.append(barSep)
-        }
-        buf.append(b.displayPricingLevel)
-    }
-
-
-    // (optional) distance
-    if (b.distanceInMeters > 0) {
-        if (buf.isNotEmpty()) {
-            buf.append(barSep)
-        }
-
-        if (b.distanceInMeters >= 1000.0) {
-            buf.append(kilometersFormatter.formatDistance(b.distanceInMeters / 1000.0, MeasureUnit.KILOMETER))
-        } else {
-            buf.append(metersFormatter.formatDistance(b.distanceInMeters, MeasureUnit.METER))
-        }
-    }
-
-    return buf.toString()
-}
-
-// Returns a formatted string with the opening hours of the business. We only take the hours
-// for today into account.
-@Composable
-private fun formatOpeningTimes(openingTimes: List<Business.OpeningTime>, timeFormatter: DateTimeFormatter): String {
-
-    val todaysDayOfWeek = LocalDate.now().dayOfWeek
-    val buf = java.lang.StringBuilder()
-
-    for (ot in openingTimes) {
-        if (ot.dayOfWeek == todaysDayOfWeek) {
-            buf.append(formatHoursAndMinutes(ot.openingAt, timeFormatter))
-            buf.append(stringResource(R.string.dash_sep))
-            buf.append(formatHoursAndMinutes(ot.closingAt, timeFormatter))
-            break
-        }
-    }
-
-    return buf.toString()
-}
-
-// Returns a formatted string of the given hours and minutes. They are assumed to be in
-// 24 hour format.
-private fun formatHoursAndMinutes(t: Business.HoursMinutes, timeFormatter: DateTimeFormatter): String {
-
-    return timeFormatter.format(LocalTime.of(t.hours, t.minutes))
-}
-
-
 @Preview(name = "Portrait", widthDp = 360, heightDp = 600)
 @Preview(name = "Landscape", widthDp = 600, heightDp = 360)
 @Composable
 private fun BusinessCardPreview() {
-    val curLocale = ConfigurationCompat.getLocales(LocalConfiguration.current)[0] ?: Locale.getDefault()
-    val timeFormatter = DateTimeFormatter.ofLocalizedTime(FormatStyle.SHORT)
-    val metersFormatter = MeasureFormat.getInstance(curLocale, MeasureFormat.FormatWidth.NARROW, NumberFormat.getIntegerInstance(curLocale))
-    val kilometersNumberFormatter = NumberFormat.getNumberInstance(curLocale)
-    kilometersNumberFormatter.minimumFractionDigits = 0
-    kilometersNumberFormatter.maximumFractionDigits = 1
-    val kilometersFormatter = MeasureFormat.getInstance(curLocale, MeasureFormat.FormatWidth.NARROW, kilometersNumberFormatter)
+    val businessFormatter = BusinessFormatter(LocalResources.current)
 
     MaterialTheme {
         BusinessCard(
@@ -378,7 +280,7 @@ private fun BusinessCardPreview() {
                 geoLocation = null,
                 reviewsUrl = ""
             ),
-            timeFormatter, metersFormatter, kilometersFormatter, { _, _ -> }
+            businessFormatter, { _, _ -> }
         )
     }
 }
