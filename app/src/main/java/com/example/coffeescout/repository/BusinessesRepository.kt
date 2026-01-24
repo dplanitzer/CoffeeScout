@@ -53,7 +53,7 @@ class BusinessesRepository(private val graphQlUrl: String, interceptor: Intercep
         .okHttpClient(buildOkHttpClient(interceptor))
         .build()
 
-    private val lock = Object()
+    private val lock = Any()
 
     // Returns the most recently encountered error. Null is returned if the most recent query has
     // worked without any error.
