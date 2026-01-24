@@ -87,10 +87,10 @@ dependencies {
     implementation("androidx.lifecycle:lifecycle-viewmodel-ktx:$lifecycleVersion")
     implementation("androidx.lifecycle:lifecycle-runtime-ktx:$lifecycleVersion")
     implementation("androidx.paging:paging-runtime:3.3.6")
-    implementation("com.squareup.okhttp3:okhttp:5.3.2")
-    implementation("com.apollographql.apollo:apollo-runtime:4.3.3")
     implementation("androidx.core:core-ktx:1.17.0")
     implementation("androidx.appcompat:appcompat:1.7.1")
+    implementation("com.squareup.okhttp3:okhttp:5.3.2")
+    implementation("com.apollographql.apollo:apollo-runtime:4.4.0")
     implementation("com.google.android.material:material:1.13.0")
 
     testImplementation("junit:junit:4.13.2")
