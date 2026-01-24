@@ -3,20 +3,17 @@
 //
 package com.example.coffeescout
 
+import androidx.activity.compose.setContent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.widget.Button
-import android.widget.LinearLayout
-import android.widget.TextView
-import androidx.core.view.isVisible
-import androidx.lifecycle.ViewModelProvider
-import androidx.lifecycle.lifecycleScope
-import androidx.paging.LoadState
-import androidx.recyclerview.widget.RecyclerView
+import androidx.activity.viewModels
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Surface
+import androidx.compose.ui.Modifier
 import com.example.coffeescout.repository.Business
+import com.example.coffeescout.repository.BusinessesRepository
 import com.example.coffeescout.repository.createBusinessRepository
-import kotlinx.coroutines.flow.collectLatest
-import kotlinx.coroutines.launch
 
 class MainActivity : AppCompatActivity() {
 
@@ -31,50 +28,38 @@ class MainActivity : AppCompatActivity() {
     }
 
 
-    private lateinit var viewModel: MainViewModel
-    private lateinit var businessesAdapter: BusinessesAdapter
+    private lateinit var repository: BusinessesRepository
+
+    private lateinit var businessFormatter: BusinessFormatter
+
+    private val viewModel: MainViewModel by viewModels { MainViewModelFactory(
+        repository,
+        USER_ADDRESS,
+        BUSINESS_CATEGORY,
+        BUSINESS_SORTING,
+        INITIAL_LOAD_SIZE,
+        LOAD_SIZE) }
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_main)
-
-        // Create the businesses repository and view model
-        val repository = createBusinessRepository()
-        viewModel = ViewModelProvider(this, MainViewModelFactory(
-            repository,
-            USER_ADDRESS,
-            BUSINESS_CATEGORY,
-            BUSINESS_SORTING,
-            INITIAL_LOAD_SIZE,
-            LOAD_SIZE)
-        )[MainViewModel::class.java]
-
 
         // Create formatters for showing hours & minutes, meters and kilometers
-        val businessFormatter = BusinessFormatter(resources)
+        businessFormatter = BusinessFormatter(resources)
+        repository = createBusinessRepository()
 
 
-        // Create the businesses adapter for the recycle view
-        businessesAdapter = BusinessesAdapter(businessFormatter, this::onBusinessCardAction)
-        findViewById<RecyclerView>(R.id.recycler_view).adapter = businessesAdapter
-
-
-        // Observe changes in the view model and act on them
-        lifecycleScope.launch {
-            viewModel.businessFlow
-                .collectLatest {
-                    businessesAdapter.submitData(it)
-                }
-        }
-
-        businessesAdapter.addLoadStateListener { loadState ->
-            when (loadState.refresh) {
-                is LoadState.Error -> {
-                    showErrorMessage(resources.getString(R.string.network_error_msg))
-                }
-                else -> {
-                    setErrorViewVisible(false)
+        setContent {
+            MaterialTheme {
+                Surface(
+                    modifier = Modifier.fillMaxSize(),
+                    color = MaterialTheme.colorScheme.background
+                ) {
+                    MainScreen(
+                        viewModel = viewModel,
+                        businessFormatter = businessFormatter,
+                        actionHandler = this::onBusinessCardAction
+                    )
                 }
             }
         }
@@ -102,25 +87,5 @@ class MainActivity : AppCompatActivity() {
                 openUrl(YELP_URL)
             }
         }
-    }
-
-    // Show the given error message and hide the recycyler view while we are displaying the error.
-    private fun showErrorMessage(msg: String) {
-
-        findViewById<TextView>(R.id.error_msg).text = msg
-        findViewById<Button>(R.id.error_retry_button).setOnClickListener {
-
-            viewModel.invalidate()
-        }
-
-        setErrorViewVisible(true)
-    }
-
-    // Show or hide the error view. The recycler view visibility is always the opposite of the
-    // error view visibility.
-    private fun setErrorViewVisible(doShow: Boolean) {
-
-        findViewById<LinearLayout>(R.id.error_view).isVisible = doShow
-        findViewById<RecyclerView>(R.id.recycler_view).isVisible = !doShow
     }
 }

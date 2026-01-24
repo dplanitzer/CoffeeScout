@@ -50,15 +50,6 @@ typealias BusinessCardActionCallback = (BusinessCardAction, Business) -> Unit
 
 
 @Composable
-fun BusinessCardHolder(business: Business,
-                       businessFormatter: BusinessFormatter,
-                       actionHandler: BusinessCardActionCallback
-) {
-
-    BusinessCard(business, businessFormatter, actionHandler)
-}
-
-@Composable
 fun BusinessCard(b: Business,
                  businessFormatter: BusinessFormatter,
                  actionHandler: BusinessCardActionCallback
