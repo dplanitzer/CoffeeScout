@@ -89,7 +89,7 @@ fun AddressInputBar(
                 disabledContainerColor = Color.Gray
             ),
             singleLine = true,
-            keyboardOptions = KeyboardOptions(imeAction = ImeAction.Done),
+            keyboardOptions = KeyboardOptions(imeAction = ImeAction.Go),
             keyboardActions = KeyboardActions(
                 onDone = {
                     focusManager.clearFocus()
