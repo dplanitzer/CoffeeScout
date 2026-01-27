@@ -7,4 +7,5 @@
     <string name="navigation_title">Navigation</string>
     <string name="hero_content_desc">Ein Bild des Unternehmens</string>
     <string name="rating_content_desc">Bewertung %1$f</string>
+    <string name="address_input_hint">Adresse</string>
 </resources>

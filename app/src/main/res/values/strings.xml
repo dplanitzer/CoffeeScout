@@ -8,6 +8,7 @@
     <string name="navigation_title">Navigation</string>
     <string name="hero_content_desc">An image of the business</string>
     <string name="rating_content_desc">Rating %1$f</string>
+    <string name="address_input_hint">Enter an address</string>
     <string name="bullet_sep" translatable="false">&#160;&#160;&#8226;&#160;&#160;</string>
     <string name="bar_sep" translatable="false">&#160;&#160;|&#160;&#160;</string>
     <string name="dash_sep" translatable="false">&#160;-&#160;</string>

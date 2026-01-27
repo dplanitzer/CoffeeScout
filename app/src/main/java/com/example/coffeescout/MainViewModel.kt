@@ -15,15 +15,17 @@ import com.example.coffeescout.repository.BusinessesRepository
 // - notifies observers when new businesses are available
 // - notifies observers when a query encounters an error. Eg network is down
 class MainViewModel(
-    repository: BusinessesRepository,
-    userAddress: String,
-    category: String,
-    sortBy: String,
+    private val repository: BusinessesRepository,
+    var streetAddress: String,
+    private val category: String,
+    private val sortBy: String,
     initialLoadSize: Int,
     loadSize: Int
 ) : ViewModel() {
 
-    private val source = BusinessesDataSource(repository, userAddress, category, sortBy)
+    fun updateStreetAddress(newValue: String) {
+        streetAddress = newValue
+    }
 
     // Observe this to get the businesses
     val businessFlow = Pager(
@@ -34,23 +36,16 @@ class MainViewModel(
             pageSize = loadSize,
             prefetchDistance = loadSize,
             initialLoadSize = initialLoadSize
-        )
-    ) {
-        source
-    }.flow
+        ),
+        pagingSourceFactory = { BusinessesDataSource(repository, streetAddress, category, sortBy) }
+    ).flow
         .cachedIn(viewModelScope)
-
-    // Reset the state of the view model. This throws all saved data away and restarts the data
-    // stream from scratch.
-    fun invalidate() {
-        source.invalidate()
-    }
 }
 
 
 class MainViewModelFactory(
     private val repository: BusinessesRepository,
-    private val userAddress: String,
+    private val streetAddress: String,
     private val category: String,
     private val sortBy: String,
     private val initialLoadSize: Int,
@@ -60,6 +55,6 @@ class MainViewModelFactory(
     @Suppress("UNCHECKED_CAST")
     override fun <T : ViewModel> create(modelClass: Class<T>): T {
 
-        return MainViewModel(repository, userAddress, category, sortBy, initialLoadSize, loadSize) as T
+        return MainViewModel(repository, streetAddress, category, sortBy, initialLoadSize, loadSize) as T
     }
 }

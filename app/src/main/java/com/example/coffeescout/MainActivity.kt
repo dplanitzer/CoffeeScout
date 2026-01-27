@@ -18,7 +18,7 @@ import com.example.coffeescout.repository.createBusinessRepository
 class MainActivity : AppCompatActivity() {
 
     companion object {
-        const val USER_ADDRESS = "85 Pike Street, Seattle, WA"
+        const val INITIAL_STREET_ADDRESS = "85 Pike Street, Seattle, WA"
         const val BUSINESS_CATEGORY = "coffee"
         const val BUSINESS_SORTING = "distance"
         const val INITIAL_LOAD_SIZE = 10
@@ -34,7 +34,7 @@ class MainActivity : AppCompatActivity() {
 
     private val viewModel: MainViewModel by viewModels { MainViewModelFactory(
         repository,
-        USER_ADDRESS,
+        INITIAL_STREET_ADDRESS,
         BUSINESS_CATEGORY,
         BUSINESS_SORTING,
         INITIAL_LOAD_SIZE,
@@ -57,8 +57,9 @@ class MainActivity : AppCompatActivity() {
                 ) {
                     MainScreen(
                         viewModel = viewModel,
+                        initialStreetAddress = INITIAL_STREET_ADDRESS,
                         businessFormatter = businessFormatter,
-                        actionHandler = this::onBusinessCardAction
+                        onAction = this::onBusinessCardAction
                     )
                 }
             }

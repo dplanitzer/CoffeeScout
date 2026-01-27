@@ -3,6 +3,7 @@
 //
 package com.example.coffeescout.repository
 
+import android.util.Log
 import com.apollographql.apollo.ApolloClient
 import com.apollographql.apollo.api.ApolloRequest
 import com.apollographql.apollo.api.ApolloResponse
@@ -65,13 +66,15 @@ class BusinessesRepository(private val graphQlUrl: String, interceptor: Intercep
 
     // Sends a GraphQL query to the GraphQL server and returns the result of that query. An
     // exception is thrown if a network or other kind of error is encountered.
-    fun queryBusinessesSync(userAddress: String, category: String, sortBy: String, offset: Int, limit: Int): QueryResult {
+    fun queryBusinessesSync(streetAddress: String, category: String, sortBy: String, offset: Int, limit: Int): QueryResult {
 
         try {
             val r = runBlocking {
+                Log.d(TAG, "Query(addr: \"$streetAddress\", cat: \"$category\", sort: \"$sortBy\", offset: $offset, limit: $limit)")
+
                 client.query(
                     GetBusinessesQuery(
-                        userAddress,
+                        streetAddress,
                         category,
                         offset,
                         limit,
@@ -94,5 +97,9 @@ class BusinessesRepository(private val graphQlUrl: String, interceptor: Intercep
             mostRecentError = ex
             throw ex
         }
+    }
+
+    companion object {
+        private const val TAG = "BusinessRepository"
     }
 }

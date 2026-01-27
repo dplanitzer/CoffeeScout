@@ -52,19 +52,19 @@ typealias BusinessCardActionCallback = (BusinessCardAction, Business) -> Unit
 @Composable
 fun BusinessCard(b: Business,
                  businessFormatter: BusinessFormatter,
-                 actionHandler: BusinessCardActionCallback
+                 onAction: BusinessCardActionCallback
 ) {
     if (LocalConfiguration.current.orientation == Configuration.ORIENTATION_LANDSCAPE) {
         LandscapeCard(
             b,
             businessFormatter,
-            actionHandler
+            onAction
         )
     } else {
         PortraitCard(
             b,
             businessFormatter,
-            actionHandler
+            onAction
         )
     }
 }
@@ -72,7 +72,7 @@ fun BusinessCard(b: Business,
 @Composable
 private fun PortraitCard(b: Business,
                          businessFormatter: BusinessFormatter,
-                         actionHandler: BusinessCardActionCallback
+                         onAction: BusinessCardActionCallback
 ) {
     Column(
         modifier = Modifier
@@ -86,7 +86,7 @@ private fun PortraitCard(b: Business,
                 .fillMaxWidth()
                 .height(260.dp)
                 .clickable {
-                    actionHandler(BusinessCardAction.GoToDetails, b)
+                    onAction(BusinessCardAction.GoToDetails, b)
                 },
             contentScale = ContentScale.Crop,
             contentDescription = stringResource(R.string.hero_content_desc)
@@ -95,7 +95,7 @@ private fun PortraitCard(b: Business,
         InfoBlock(
             b,
             businessFormatter,
-            actionHandler
+            onAction
         )
     }
 }
@@ -103,7 +103,7 @@ private fun PortraitCard(b: Business,
 @Composable
 private fun LandscapeCard(b: Business,
                           businessFormatter: BusinessFormatter,
-                          actionHandler: BusinessCardActionCallback
+                          onAction: BusinessCardActionCallback
 ) {
     Row(
         verticalAlignment = Alignment.CenterVertically,
@@ -119,7 +119,7 @@ private fun LandscapeCard(b: Business,
                 .height(230.dp)
                 .padding(horizontal = 16.dp)
                 .clickable {
-                    actionHandler(BusinessCardAction.GoToDetails, b)
+                    onAction(BusinessCardAction.GoToDetails, b)
                 },
             contentScale = ContentScale.Crop,
             contentDescription = stringResource(R.string.hero_content_desc)
@@ -132,7 +132,7 @@ private fun LandscapeCard(b: Business,
             InfoBlock(
                 b,
                 businessFormatter,
-                actionHandler
+                onAction
             )
         }
     }
@@ -141,7 +141,7 @@ private fun LandscapeCard(b: Business,
 @Composable
 private fun InfoBlock(b: Business,
                       businessFormatter: BusinessFormatter,
-                      actionHandler: BusinessCardActionCallback
+                      onAction: BusinessCardActionCallback
 ) {
     Text(
         text = b.name,
@@ -213,7 +213,7 @@ private fun InfoBlock(b: Business,
             .padding(vertical = 16.dp)
     ) {
         OutlinedButton(onClick = {
-            actionHandler(BusinessCardAction.GoToReviews, b)
+            onAction(BusinessCardAction.GoToReviews, b)
         }) {
             Text(stringResource(R.string.read_reviews_title))
         }
@@ -229,7 +229,7 @@ private fun InfoBlock(b: Business,
                 .width(72.dp)
                 .padding(horizontal = 10.dp)
                 .clickable {
-                    actionHandler(BusinessCardAction.GoToYelp, b)
+                    onAction(BusinessCardAction.GoToYelp, b)
                 }
         )
 
@@ -238,7 +238,7 @@ private fun InfoBlock(b: Business,
         )
 
         OutlinedButton(onClick = {
-            actionHandler(BusinessCardAction.GoToNavigation, b)
+            onAction(BusinessCardAction.GoToNavigation, b)
         }) {
             Text(stringResource(R.string.navigation_title))
         }

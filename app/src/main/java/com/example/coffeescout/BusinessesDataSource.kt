@@ -12,7 +12,7 @@ import kotlin.math.max
 
 class BusinessesDataSource(
     private val repository: BusinessesRepository,
-    private val userAddress: String,
+    private val streetAddress: String,
     private val category: String,
     private val sortBy: String
     ) : PagingSource<Int, Business>() {
@@ -21,7 +21,7 @@ class BusinessesDataSource(
 
         return try {
             val offset = params.key ?: 0
-            val qr = repository.queryBusinessesSync(userAddress, category, sortBy, offset, params.loadSize)
+            val qr = repository.queryBusinessesSync(streetAddress, category, sortBy, offset, params.loadSize)
             val prevKey = if (offset > 0) max(offset - params.loadSize, 0) else null
             val nextKey = if (offset + qr.businesses.size < qr.totalCount) offset + qr.businesses.size else null
 
