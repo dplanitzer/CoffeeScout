@@ -1,10 +1,12 @@
-query GetBusinessesQuery($location: String!, $categories: String!, $offset: Int!, $limit: Int!, $sortby: String!) {
+query GetBusinessesQuery($location: String, $longitude: Float, $latitude: Float, $categories: String, $offset: Int, $limit: Int, $sortby: String) {
   search(
     location: $location
     categories: $categories
     offset: $offset
     limit: $limit
     sort_by: $sortby
+	longitude: $longitude
+	latitude: $latitude
   ) {
     total
     business {

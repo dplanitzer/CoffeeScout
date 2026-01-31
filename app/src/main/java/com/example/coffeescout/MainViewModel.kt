@@ -9,6 +9,7 @@ import androidx.lifecycle.viewModelScope
 import androidx.paging.Pager
 import androidx.paging.PagingConfig
 import androidx.paging.cachedIn
+import com.example.coffeescout.repository.BusinessAddress
 import com.example.coffeescout.repository.BusinessesRepository
 
 // A view model which stores the result of running a (paged) query for businesses:
@@ -16,16 +17,12 @@ import com.example.coffeescout.repository.BusinessesRepository
 // - notifies observers when a query encounters an error. Eg network is down
 class MainViewModel(
     private val repository: BusinessesRepository,
-    var streetAddress: String,
+    var address: BusinessAddress,
     private val category: String,
     private val sortBy: String,
     initialLoadSize: Int,
     loadSize: Int
 ) : ViewModel() {
-
-    fun updateStreetAddress(newValue: String) {
-        streetAddress = newValue
-    }
 
     // Observe this to get the businesses
     val businessFlow = Pager(
@@ -37,7 +34,7 @@ class MainViewModel(
             prefetchDistance = loadSize,
             initialLoadSize = initialLoadSize
         ),
-        pagingSourceFactory = { BusinessesDataSource(repository, streetAddress, category, sortBy) }
+        pagingSourceFactory = { BusinessesDataSource(repository, address, category, sortBy) }
     ).flow
         .cachedIn(viewModelScope)
 }
@@ -45,7 +42,7 @@ class MainViewModel(
 
 class MainViewModelFactory(
     private val repository: BusinessesRepository,
-    private val streetAddress: String,
+    private val address: BusinessAddress,
     private val category: String,
     private val sortBy: String,
     private val initialLoadSize: Int,
@@ -55,6 +52,6 @@ class MainViewModelFactory(
     @Suppress("UNCHECKED_CAST")
     override fun <T : ViewModel> create(modelClass: Class<T>): T {
 
-        return MainViewModel(repository, streetAddress, category, sortBy, initialLoadSize, loadSize) as T
+        return MainViewModel(repository, address, category, sortBy, initialLoadSize, loadSize) as T
     }
 }

@@ -63,8 +63,8 @@ private fun createMockedBusinessRepository(): BusinessesRepository {
             }
           ],
           "location": {
-            "address1": "236 Townsend St",
-            "city": "San Francisco"
+            "address1": "236 Pike St",
+            "city": "Seattle"
           },
           "name": "Cafe Okawari",
           "photos": [
@@ -116,7 +116,7 @@ private fun createMockedBusinessRepository(): BusinessesRepository {
           ],
           "location": {
             "address1": "236 Pine St",
-            "city": "San Francisco"
+            "city": "Seattle"
           },
           "name": "Cafe Sima",
           "photos": [
@@ -167,8 +167,8 @@ private fun createMockedBusinessRepository(): BusinessesRepository {
             }
           ],
           "location": {
-            "address1": "6 Urban St",
-            "city": "San Francisco"
+            "address1": "6 Pike St",
+            "city": "Seattle"
           },
           "name": "Cafe Sima",
           "photos": [
@@ -220,7 +220,7 @@ private fun createMockedBusinessRepository(): BusinessesRepository {
           ],
           "location": {
             "address1": "16 Vine St",
-            "city": "San Francisco"
+            "city": "Seattle"
           },
           "name": "Cafe Hari",
           "photos": [
@@ -272,7 +272,7 @@ private fun createMockedBusinessRepository(): BusinessesRepository {
           ],
           "location": {
             "address1": "18 Vine St",
-            "city": "San Francisco"
+            "city": "Seattle"
           },
           "name": "Cafe Mali",
           "photos": [
@@ -323,8 +323,8 @@ private fun createMockedBusinessRepository(): BusinessesRepository {
             }
           ],
           "location": {
-            "address1": "16 X St",
-            "city": "San Francisco"
+            "address1": "16 Pine St",
+            "city": "Seattle"
           },
           "name": "Cafe Hermagor",
           "photos": [

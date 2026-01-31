@@ -257,7 +257,7 @@ private fun BusinessCardPreview() {
             Business(
                 id = "Jpxv-URBpIvcu0mE5B6S3g",
                 name = "Cafe Sima",
-                displayAddress = "236 Pine St, San Francisco",
+                displayAddress = "236 Pine St, Seattle",
                 heroImageUrl = "https://s3-media1.ak.yelpcdn.com/bphoto/ehZk1zXTE5xof4d2fcGLeQ/o.jpg",
                 detailsPageUrl = "https://www.yelp.com/biz/cafe-okawari-san-francisco?adjust_creative=GPmwJFx9er_qLz3BRWXviw&utm_campaign=yelp_api_v3&utm_medium=api_v3_graphql&utm_source=GPmwJFx9er_qLz3BRWXviw",
                 displayPricingLevel = "$$",

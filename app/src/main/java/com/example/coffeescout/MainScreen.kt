@@ -1,5 +1,6 @@
 package com.example.coffeescout
 
+import android.util.Log
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -37,7 +38,8 @@ import com.example.coffeescout.repository.Business
 fun MainScreen(viewModel: MainViewModel = viewModel(),
                initialStreetAddress: String,
                businessFormatter: BusinessFormatter,
-               onAction: BusinessCardActionCallback = { _, _ -> }
+               onAction: BusinessCardActionCallback = { _, _ -> },
+               onAddressChange: (String, LazyPagingItems<Business>) -> Unit = { _, _ -> }
 ) {
     val lazyPagingItems = viewModel.businessFlow.collectAsLazyPagingItems()
 
@@ -45,8 +47,7 @@ fun MainScreen(viewModel: MainViewModel = viewModel(),
         AddressInputBar(
             initialStreetAddress = initialStreetAddress,
             onAddressChange = { newAddress ->
-                viewModel.updateStreetAddress(newAddress)
-                lazyPagingItems.refresh()
+                onAddressChange(newAddress, lazyPagingItems)
             }
         )
 
@@ -82,7 +83,7 @@ fun AddressInputBar(
             modifier = Modifier
                 .fillMaxWidth()
                 .wrapContentHeight(),
-            label = { Text(stringResource(R.string.address_input_hint)) },
+            placeholder = { Text(stringResource(R.string.address_input_hint)) },
             colors = OutlinedTextFieldDefaults.colors(
                 focusedContainerColor = Color.White,
                 unfocusedContainerColor = colorResource(R.color.purple_200),

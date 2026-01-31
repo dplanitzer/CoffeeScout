@@ -3,17 +3,24 @@
 //
 package com.example.coffeescout
 
+import android.Manifest
+import android.location.Location
 import androidx.activity.compose.setContent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import androidx.activity.viewModels
+import androidx.annotation.RequiresPermission
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.ui.Modifier
+import androidx.paging.compose.LazyPagingItems
 import com.example.coffeescout.repository.Business
+import com.example.coffeescout.repository.BusinessAddress
 import com.example.coffeescout.repository.BusinessesRepository
 import com.example.coffeescout.repository.createBusinessRepository
+import com.google.android.gms.location.FusedLocationProviderClient
+import com.google.android.gms.location.LocationServices
 
 class MainActivity : AppCompatActivity() {
 
@@ -28,13 +35,15 @@ class MainActivity : AppCompatActivity() {
     }
 
 
+    private lateinit var fusedLocationClient: FusedLocationProviderClient
+
     private lateinit var repository: BusinessesRepository
 
     private lateinit var businessFormatter: BusinessFormatter
 
     private val viewModel: MainViewModel by viewModels { MainViewModelFactory(
         repository,
-        INITIAL_STREET_ADDRESS,
+        BusinessAddress.Address(INITIAL_STREET_ADDRESS),
         BUSINESS_CATEGORY,
         BUSINESS_SORTING,
         INITIAL_LOAD_SIZE,
@@ -44,7 +53,8 @@ class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        // Create formatters for showing hours & minutes, meters and kilometers
+        fusedLocationClient = LocationServices.getFusedLocationProviderClient(this)
+
         businessFormatter = BusinessFormatter(resources)
         repository = createBusinessRepository()
 
@@ -59,7 +69,8 @@ class MainActivity : AppCompatActivity() {
                         viewModel = viewModel,
                         initialStreetAddress = INITIAL_STREET_ADDRESS,
                         businessFormatter = businessFormatter,
-                        onAction = this::onBusinessCardAction
+                        onAction = this::onBusinessCardAction,
+                        onAddressChange = this::onAddressChange
                     )
                 }
             }
@@ -87,6 +98,29 @@ class MainActivity : AppCompatActivity() {
             BusinessCardAction.GoToYelp -> {
                 openUrl(YELP_URL)
             }
+        }
+    }
+
+    // Handles the case when the user enters a new address in the address input bar.
+    @RequiresPermission(allOf = [Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.ACCESS_COARSE_LOCATION])
+    private fun onAddressChange(newAddress: String, lazyPagingItems: LazyPagingItems<Business>) {
+        val addr = newAddress.trim()
+
+        if (addr.isEmpty()) {
+            return
+        }
+
+        if (getString(R.string.nearby_address).equals(addr, ignoreCase = true)) {
+            fusedLocationClient.lastLocation
+                .addOnSuccessListener { location : Location? ->
+                    if (location != null) {
+                        viewModel.address = BusinessAddress.Location(location.latitude, location.longitude)
+                        lazyPagingItems.refresh()
+                    }
+                }
+        } else {
+            viewModel.address = BusinessAddress.Address(addr)
+            lazyPagingItems.refresh()
         }
     }
 }

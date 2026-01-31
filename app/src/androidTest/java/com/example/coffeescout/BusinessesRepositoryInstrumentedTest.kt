@@ -97,8 +97,8 @@ class BusinessesRepositoryInstrumentedTest {
             }
           ],
           "location": {
-            "address1": "236 Townsend St",
-            "city": "San Francisco"
+            "address1": "236 Pike St",
+            "city": "Seattle"
           },
           "name": "Cafe Okawari",
           "photos": [
