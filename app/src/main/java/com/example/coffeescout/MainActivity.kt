@@ -122,7 +122,7 @@ class MainActivity : AppCompatActivity() {
     private suspend fun onResolveAddress(newAddress: String): BusinessAddress {
         val addr = newAddress.trim()
 
-        if (getString(R.string.nearby_address).equals(addr, ignoreCase = true)) {
+        return if (getString(R.string.nearby_address).equals(addr, ignoreCase = true)) {
             val (granted, denied) = requestMultiplePermissions.request(locationPermissions)
 
             if (!granted.contains(Manifest.permission.ACCESS_FINE_LOCATION)
@@ -130,14 +130,16 @@ class MainActivity : AppCompatActivity() {
                 throw SecurityException("permissions denied")
             }
 
+
             val location = withContext(Dispatchers.IO) { await(fusedLocationClient.lastLocation) }
-            if (location != null) {
-                return BusinessAddress.Location(location.latitude, location.longitude)
-            } else {
-                return BusinessAddress.Address(addr)
+            if (location == null) {
+                throw SecurityException("no location")
             }
+
+
+            BusinessAddress.Location(location.latitude, location.longitude)
         } else {
-            return BusinessAddress.Address(addr)
+            BusinessAddress.Address(addr)
         }
     }
 }
