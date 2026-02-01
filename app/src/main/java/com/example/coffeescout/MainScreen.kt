@@ -92,7 +92,7 @@ fun AddressInputBar(
             singleLine = true,
             keyboardOptions = KeyboardOptions(imeAction = ImeAction.Go),
             keyboardActions = KeyboardActions(
-                onDone = {
+                onGo = {
                     focusManager.clearFocus()
                     keyboardController?.hide()
 
