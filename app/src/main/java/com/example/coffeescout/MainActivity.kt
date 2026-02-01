@@ -114,7 +114,9 @@ class MainActivity : AppCompatActivity() {
         }
 
         if (getString(R.string.nearby_address).equals(addr, ignoreCase = true)) {
-            requestNearbyBusinesses(lazyPagingItems)
+            requestLocationPermission {
+                requestNearbyBusinesses(lazyPagingItems)
+            }
         } else {
             viewModel.address = BusinessAddress.Address(addr)
             lazyPagingItems.refresh()
@@ -129,23 +131,17 @@ class MainActivity : AppCompatActivity() {
                     return@addOnSuccessListener
                 }
 
-                val doNearbyBusinessesRequest = {
-                    viewModel.address =
-                        BusinessAddress.Location(location.latitude, location.longitude)
-                    lazyPagingItems.refresh()
-                }
-
-                if (isFineLocationPermissionGranted || isCoarseLocationPermissionGranted) {
-                    doNearbyBusinessesRequest()
-                } else {
-                    requestLocationPermission {
-                        doNearbyBusinessesRequest()
-                    }
-                }
+                viewModel.address = BusinessAddress.Location(location.latitude, location.longitude)
+                lazyPagingItems.refresh()
             }
     }
 
     private fun requestLocationPermission(onSuccess: () -> Unit = {}) {
+        if (isFineLocationPermissionGranted || isCoarseLocationPermissionGranted) {
+            onSuccess()
+            return
+        }
+
         val locationPermissionRequest = registerForActivityResult(
             ActivityResultContracts.RequestMultiplePermissions()
         ) { permissions ->
