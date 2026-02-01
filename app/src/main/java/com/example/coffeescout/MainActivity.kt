@@ -4,19 +4,16 @@
 package com.example.coffeescout
 
 import android.Manifest
-import android.content.pm.PackageManager
-import android.location.Location
 import androidx.activity.compose.setContent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import androidx.activity.result.contract.ActivityResultContracts
 import androidx.activity.viewModels
 import androidx.annotation.RequiresPermission
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.ui.Modifier
-import androidx.core.content.ContextCompat
+import androidx.compose.ui.res.stringResource
 import androidx.paging.compose.LazyPagingItems
 import com.example.coffeescout.repository.Business
 import com.example.coffeescout.repository.BusinessAddress
@@ -24,11 +21,13 @@ import com.example.coffeescout.repository.BusinessesRepository
 import com.example.coffeescout.repository.createBusinessRepository
 import com.google.android.gms.location.FusedLocationProviderClient
 import com.google.android.gms.location.LocationServices
+import com.google.android.gms.tasks.Tasks.await
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.withContext
 
 class MainActivity : AppCompatActivity() {
 
     companion object {
-        const val INITIAL_STREET_ADDRESS = "85 Pike Street, Seattle, WA"
         const val BUSINESS_CATEGORY = "coffee"
         const val BUSINESS_SORTING = "distance"
         const val INITIAL_LOAD_SIZE = 10
@@ -38,6 +37,13 @@ class MainActivity : AppCompatActivity() {
     }
 
 
+    private val locationPermissions = setOf(
+        Manifest.permission.ACCESS_COARSE_LOCATION,
+        Manifest.permission.ACCESS_FINE_LOCATION
+    )
+
+    private val requestMultiplePermissions = RequestMultiplePermissions(this)
+
     private lateinit var fusedLocationClient: FusedLocationProviderClient
 
     private lateinit var repository: BusinessesRepository
@@ -46,7 +52,8 @@ class MainActivity : AppCompatActivity() {
 
     private val viewModel: MainViewModel by viewModels { MainViewModelFactory(
         repository,
-        BusinessAddress.Address(INITIAL_STREET_ADDRESS),
+        getString(R.string.nearby_address),
+        this::onResolveAddress,
         BUSINESS_CATEGORY,
         BUSINESS_SORTING,
         INITIAL_LOAD_SIZE,
@@ -70,7 +77,7 @@ class MainActivity : AppCompatActivity() {
                 ) {
                     MainScreen(
                         viewModel = viewModel,
-                        initialStreetAddress = INITIAL_STREET_ADDRESS,
+                        initialStreetAddress = stringResource(R.string.nearby_address),
                         businessFormatter = businessFormatter,
                         onAction = this::onBusinessCardAction,
                         onAddressChange = this::onAddressChange
@@ -107,71 +114,30 @@ class MainActivity : AppCompatActivity() {
     // Handles the case when the user enters a new address in the address input bar.
     @RequiresPermission(allOf = [Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.ACCESS_COARSE_LOCATION])
     private fun onAddressChange(newAddress: String, lazyPagingItems: LazyPagingItems<Business>) {
-        val addr = newAddress.trim()
-
-        if (addr.isEmpty()) {
-            return
-        }
-
-        if (getString(R.string.nearby_address).equals(addr, ignoreCase = true)) {
-            requestLocationPermission {
-                requestNearbyBusinesses(lazyPagingItems)
-            }
-        } else {
-            viewModel.address = BusinessAddress.Address(addr)
-            lazyPagingItems.refresh()
-        }
+        viewModel.address = newAddress
+        lazyPagingItems.refresh()
     }
 
     @RequiresPermission(allOf = [Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.ACCESS_COARSE_LOCATION])
-    private fun requestNearbyBusinesses(lazyPagingItems: LazyPagingItems<Business>) {
-        fusedLocationClient.lastLocation
-            .addOnSuccessListener { location: Location? ->
-                if (location == null) {
-                    return@addOnSuccessListener
-                }
+    private suspend fun onResolveAddress(newAddress: String): BusinessAddress {
+        val addr = newAddress.trim()
 
-                viewModel.address = BusinessAddress.Location(location.latitude, location.longitude)
-                lazyPagingItems.refresh()
+        if (getString(R.string.nearby_address).equals(addr, ignoreCase = true)) {
+            val (granted, denied) = requestMultiplePermissions.request(locationPermissions)
+
+            if (!granted.contains(Manifest.permission.ACCESS_FINE_LOCATION)
+                && !granted.contains(Manifest.permission.ACCESS_COARSE_LOCATION)) {
+                throw SecurityException("permissions denied")
             }
-    }
 
-    private fun requestLocationPermission(onSuccess: () -> Unit = {}) {
-        if (isFineLocationPermissionGranted || isCoarseLocationPermissionGranted) {
-            onSuccess()
-            return
-        }
-
-        val locationPermissionRequest = registerForActivityResult(
-            ActivityResultContracts.RequestMultiplePermissions()
-        ) { permissions ->
-            if (permissions.getOrDefault(Manifest.permission.ACCESS_FINE_LOCATION, false)
-                || permissions.getOrDefault(Manifest.permission.ACCESS_COARSE_LOCATION, false)) {
-                onSuccess()
+            val location = withContext(Dispatchers.IO) { await(fusedLocationClient.lastLocation) }
+            if (location != null) {
+                return BusinessAddress.Location(location.latitude, location.longitude)
+            } else {
+                return BusinessAddress.Address(addr)
             }
+        } else {
+            return BusinessAddress.Address(addr)
         }
-
-        // Before you perform the actual permission request, check whether your app
-        // already has the permissions, and whether your app needs to show a permission
-        // rationale dialog. For more details, see Request permissions:
-        // https://developer.android.com/training/permissions/requesting#request-permission
-        locationPermissionRequest.launch(
-            arrayOf(
-                Manifest.permission.ACCESS_FINE_LOCATION,
-                Manifest.permission.ACCESS_COARSE_LOCATION
-            )
-        )
     }
-
-    private val isFineLocationPermissionGranted: Boolean
-        get() = ContextCompat.checkSelfPermission(
-            this,
-            Manifest.permission.ACCESS_FINE_LOCATION
-        ) == PackageManager.PERMISSION_GRANTED
-
-    private val isCoarseLocationPermissionGranted: Boolean
-        get() = ContextCompat.checkSelfPermission(
-            this,
-            Manifest.permission.ACCESS_COARSE_LOCATION
-        ) == PackageManager.PERMISSION_GRANTED
 }

@@ -9,11 +9,14 @@ import androidx.paging.PagingState
 import com.example.coffeescout.repository.Business
 import com.example.coffeescout.repository.BusinessAddress
 import com.example.coffeescout.repository.BusinessesRepository
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.withContext
 import kotlin.math.max
 
 class BusinessesDataSource(
     private val repository: BusinessesRepository,
-    private val address: BusinessAddress,
+    private val address: String,
+    private val onResolveAddress: suspend (String) -> BusinessAddress,
     private val category: String,
     private val sortBy: String
     ) : PagingSource<Int, Business>() {
@@ -21,8 +24,12 @@ class BusinessesDataSource(
     override suspend fun load(params: LoadParams<Int>): LoadResult<Int, Business> {
 
         return try {
+            val addr = withContext(Dispatchers.Main) {
+                onResolveAddress(address)
+            }
+
             val offset = params.key ?: 0
-            val qr = repository.query(address, category, sortBy, offset, params.loadSize)
+            val qr = repository.query(addr, category, sortBy, offset, params.loadSize)
             val prevKey = if (offset > 0) max(offset - params.loadSize, 0) else null
             val nextKey = if (offset + qr.businesses.size < qr.totalCount) offset + qr.businesses.size else null
 

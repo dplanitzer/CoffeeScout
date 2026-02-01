@@ -17,7 +17,8 @@ import com.example.coffeescout.repository.BusinessesRepository
 // - notifies observers when a query encounters an error. Eg network is down
 class MainViewModel(
     private val repository: BusinessesRepository,
-    var address: BusinessAddress,
+    var address: String,
+    val onResolveAddress: suspend (String) -> BusinessAddress,
     private val category: String,
     private val sortBy: String,
     initialLoadSize: Int,
@@ -34,7 +35,7 @@ class MainViewModel(
             prefetchDistance = loadSize,
             initialLoadSize = initialLoadSize
         ),
-        pagingSourceFactory = { BusinessesDataSource(repository, address, category, sortBy) }
+        pagingSourceFactory = { BusinessesDataSource(repository, address, onResolveAddress, category, sortBy) }
     ).flow
         .cachedIn(viewModelScope)
 }
@@ -42,7 +43,8 @@ class MainViewModel(
 
 class MainViewModelFactory(
     private val repository: BusinessesRepository,
-    private val address: BusinessAddress,
+    private val address: String,
+    private val onResolveAddress: suspend (String) -> BusinessAddress,
     private val category: String,
     private val sortBy: String,
     private val initialLoadSize: Int,
@@ -52,6 +54,6 @@ class MainViewModelFactory(
     @Suppress("UNCHECKED_CAST")
     override fun <T : ViewModel> create(modelClass: Class<T>): T {
 
-        return MainViewModel(repository, address, category, sortBy, initialLoadSize, loadSize) as T
+        return MainViewModel(repository, address, onResolveAddress, category, sortBy, initialLoadSize, loadSize) as T
     }
 }
