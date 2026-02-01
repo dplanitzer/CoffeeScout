@@ -22,7 +22,7 @@ class BusinessesDataSource(
 
         return try {
             val offset = params.key ?: 0
-            val qr = repository.queryBusinessesSync(address, category, sortBy, offset, params.loadSize)
+            val qr = repository.query(address, category, sortBy, offset, params.loadSize)
             val prevKey = if (offset > 0) max(offset - params.loadSize, 0) else null
             val nextKey = if (offset + qr.businesses.size < qr.totalCount) offset + qr.businesses.size else null
 

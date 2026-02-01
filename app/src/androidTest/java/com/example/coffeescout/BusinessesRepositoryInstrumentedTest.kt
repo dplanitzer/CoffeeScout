@@ -1,7 +1,9 @@
 package com.example.coffeescout
 
 import androidx.test.ext.junit.runners.AndroidJUnit4
+import com.example.coffeescout.repository.BusinessAddress
 import com.example.coffeescout.repository.BusinessesRepository
+import kotlinx.coroutines.runBlocking
 import okhttp3.Interceptor
 import okhttp3.MediaType.Companion.toMediaType
 import okhttp3.Protocol
@@ -41,7 +43,7 @@ class BusinessesRepositoryInstrumentedTest {
 
         val rep = BusinessesRepository("http://127.0.0.1/graphql", MockInterceptor())
         try {
-            rep.queryBusinessesSync("here", "this", "distance", 0, 10)
+            runBlocking { rep.query(BusinessAddress.Address("here"), "this", "distance", 0, 10) }
             fail("Expected an exception")
         } catch (_: Exception) {
 
@@ -128,7 +130,7 @@ class BusinessesRepositoryInstrumentedTest {
 
         val rep = BusinessesRepository("http://127.0.0.1/graphql", MockInterceptor())
         try {
-            val r = rep.queryBusinessesSync("here", "this", "distance", 0, 10)
+            val r = runBlocking {rep.query(BusinessAddress.Address("here"), "this", "distance", 0, 10) }
             assertEquals(1, r.totalCount)
             assertEquals(1, r.businesses.size)
 
