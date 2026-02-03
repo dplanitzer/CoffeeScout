@@ -15,10 +15,12 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import java.io.IOException
 
 
 @Composable
 fun ErrorView(
+    exception: Throwable,
     onRetry: () -> Unit = {},
     modifier: Modifier
 ) {
@@ -28,7 +30,7 @@ fun ErrorView(
         modifier = modifier
     ) {
         Text(
-            text = stringResource(R.string.network_error_msg),
+            text = stringResource(messageId(exception)),
             textAlign = TextAlign.Center,
             modifier = Modifier
                 .fillMaxWidth()
@@ -42,11 +44,21 @@ fun ErrorView(
     }
 }
 
+private fun messageId(ex: Throwable): Int {
+    return when(ex) {
+        is LocationPermissionDenied -> R.string.loc_permission_error_msg
+        else -> R.string.network_error_msg
+    }
+}
+
 
 @Preview()
 @Composable
 private fun ErrorViewPreview() {
     MaterialTheme {
-        ErrorView(modifier = Modifier)
+        ErrorView(
+            exception = IOException("Some network error"),
+            modifier = Modifier
+        )
     }
 }

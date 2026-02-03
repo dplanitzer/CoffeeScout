@@ -142,9 +142,10 @@ fun LazyBusinessColumn(
                 ) }
             }*/
                 loadState.refresh is LoadState.Error -> {
-                    //val e = loadState.refresh as LoadState.Error
+                    val e = loadState.refresh as LoadState.Error
                     item {
                         ErrorView(
+                            exception = e.error,
                             onRetry = { lazyPagingItems.retry() },
                             modifier = Modifier
                                         .fillMaxWidth()

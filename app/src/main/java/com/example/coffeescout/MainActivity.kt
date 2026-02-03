@@ -127,19 +127,16 @@ class MainActivity : AppCompatActivity() {
 
             if (!granted.contains(Manifest.permission.ACCESS_FINE_LOCATION)
                 && !granted.contains(Manifest.permission.ACCESS_COARSE_LOCATION)) {
-                throw SecurityException("permissions denied")
+                throw LocationPermissionDenied()
             }
 
 
             val location = withContext(Dispatchers.IO) { await(fusedLocationClient.lastLocation) }
-            if (location == null) {
-                throw SecurityException("no location")
-            }
-
-
             BusinessAddress.Location(location.latitude, location.longitude)
         } else {
             BusinessAddress.Address(addr)
         }
     }
 }
+
+class LocationPermissionDenied : Exception("")

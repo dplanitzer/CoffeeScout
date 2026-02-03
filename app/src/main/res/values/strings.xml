@@ -1,8 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="app_name" translatable="false">Coffee Scout</string>
     <string name="business_open">Open</string>
     <string name="business_closed">Closed</string>
     <string name="network_error_msg">Encountered a network error. Please try again.</string>
+    <string name="loc_permission_error_msg">Please grant CoffeeScout location permissions to allow it to show you nearby coffee houses.</string>
     <string name="retry_title">Retry</string>
     <string name="read_reviews_title">Read Reviews</string>
     <string name="navigation_title">Navigation</string>

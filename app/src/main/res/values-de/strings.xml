@@ -1,7 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="business_open">Offen</string>
     <string name="business_closed">Geschlossen</string>
     <string name="network_error_msg">Es ist ein Netzwerkfehler aufgetreten. Bitte versuche sie es erneut.</string>
+    <string name="loc_permission_error_msg">Bitte geben sie CoffeeScout die Standortberechtigungs-Erlaubnis um ihnen Kaffeehäuser anzeigen zu können.</string>
     <string name="retry_title">Wiederholen</string>
     <string name="read_reviews_title">Bewertungen</string>
     <string name="navigation_title">Navigation</string>
