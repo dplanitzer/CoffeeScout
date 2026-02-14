@@ -82,11 +82,11 @@ dependencies {
 
     implementation("io.coil-kt:coil-compose:2.7.0")
     implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:1.10.0")
-    implementation("androidx.activity:activity-compose:1.12.3")
+    implementation("androidx.activity:activity-compose:1.12.4")
     implementation("androidx.lifecycle:lifecycle-viewmodel-compose:$lifecycleVersion")
     implementation("androidx.lifecycle:lifecycle-viewmodel-ktx:$lifecycleVersion")
     implementation("androidx.lifecycle:lifecycle-runtime-ktx:$lifecycleVersion")
-    implementation("androidx.paging:paging-runtime:3.4.0")
+    implementation("androidx.paging:paging-runtime:3.4.1")
     implementation("androidx.core:core-ktx:1.17.0")
     implementation("androidx.appcompat:appcompat:1.7.1")
     implementation("com.squareup.okhttp3:okhttp:5.3.2")
