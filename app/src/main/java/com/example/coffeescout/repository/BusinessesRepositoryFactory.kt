@@ -81,10 +81,10 @@ private fun createMockedBusinessRepository(): BusinessesRepository {
           }
         },
         {
-          "distance": 491.02400910214897,
+          "distance": 100,
           "hours": [
             {
-              "is_open_now": false,
+              "is_open_now": true,
               "open": [
                 {
                   "day": 0,
@@ -133,7 +133,7 @@ private fun createMockedBusinessRepository(): BusinessesRepository {
           }
         },
         {
-          "distance": 491.02400910214897,
+          "distance": 210,
           "hours": [
             {
               "is_open_now": false,
@@ -176,7 +176,7 @@ private fun createMockedBusinessRepository(): BusinessesRepository {
           ],
           "price": "${'$'}${'$'}",
           "rating": 5,
-          "review_count": 268,
+          "review_count": 510,
           "url": "https://www.yelp.com/biz/cafe-okawari-san-francisco?adjust_creative=GPmwJFx9er_qLz3BRWXviw&utm_campaign=yelp_api_v3&utm_medium=api_v3_graphql&utm_source=GPmwJFx9er_qLz3BRWXviw",
           "id": "Jpxv-URBpIvcu0mE5B6S3g",
           "coordinates": {
@@ -185,10 +185,10 @@ private fun createMockedBusinessRepository(): BusinessesRepository {
           }
         },
         {
-          "distance": 491.02400910214897,
+          "distance": 10,
           "hours": [
             {
-              "is_open_now": false,
+              "is_open_now": true,
               "open": [
                 {
                   "day": 0,
@@ -228,7 +228,7 @@ private fun createMockedBusinessRepository(): BusinessesRepository {
           ],
           "price": "${'$'}${'$'}",
           "rating": 5,
-          "review_count": 268,
+          "review_count": 310,
           "url": "https://www.yelp.com/biz/cafe-okawari-san-francisco?adjust_creative=GPmwJFx9er_qLz3BRWXviw&utm_campaign=yelp_api_v3&utm_medium=api_v3_graphql&utm_source=GPmwJFx9er_qLz3BRWXviw",
           "id": "Jpxv-URBpIvcu0mE5B6S3g",
           "coordinates": {
@@ -237,7 +237,7 @@ private fun createMockedBusinessRepository(): BusinessesRepository {
           }
         },
         {
-          "distance": 491.02400910214897,
+          "distance": 810,
           "hours": [
             {
               "is_open_now": false,
@@ -280,7 +280,7 @@ private fun createMockedBusinessRepository(): BusinessesRepository {
           ],
           "price": "${'$'}${'$'}",
           "rating": 3.5,
-          "review_count": 268,
+          "review_count": 120,
           "url": "https://www.yelp.com/biz/cafe-okawari-san-francisco?adjust_creative=GPmwJFx9er_qLz3BRWXviw&utm_campaign=yelp_api_v3&utm_medium=api_v3_graphql&utm_source=GPmwJFx9er_qLz3BRWXviw",
           "id": "Jpxv-URBpIvcu0mE5B6S3g",
           "coordinates": {
@@ -289,10 +289,10 @@ private fun createMockedBusinessRepository(): BusinessesRepository {
           }
         },
         {
-          "distance": 491.02400910214897,
+          "distance": 312,
           "hours": [
             {
-              "is_open_now": false,
+              "is_open_now": true,
               "open": [
                 {
                   "day": 0,
@@ -332,7 +332,7 @@ private fun createMockedBusinessRepository(): BusinessesRepository {
           ],
           "price": "${'$'}${'$'}",
           "rating": 3.5,
-          "review_count": 268,
+          "review_count": 50,
           "url": "https://www.yelp.com/biz/cafe-okawari-san-francisco?adjust_creative=GPmwJFx9er_qLz3BRWXviw&utm_campaign=yelp_api_v3&utm_medium=api_v3_graphql&utm_source=GPmwJFx9er_qLz3BRWXviw",
           "id": "Jpxv-URBpIvcu0mE5B6S3g",
           "coordinates": {
