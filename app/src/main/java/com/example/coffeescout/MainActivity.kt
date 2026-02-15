@@ -7,6 +7,7 @@ import android.Manifest
 import androidx.activity.compose.setContent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import androidx.activity.enableEdgeToEdge
 import androidx.activity.viewModels
 import androidx.annotation.RequiresPermission
 import androidx.compose.foundation.layout.fillMaxSize
@@ -62,6 +63,7 @@ class MainActivity : AppCompatActivity() {
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
+        enableEdgeToEdge()
         super.onCreate(savedInstanceState)
 
         fusedLocationClient = LocationServices.getFusedLocationProviderClient(this)
