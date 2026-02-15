@@ -1,5 +1,5 @@
 # CoffeeScout
-A simpe Android app to find the best coffee spots near you. The purpose of this project is to show how to leverage the latest development tools &amp; techniques to successfully create a modern Android app.
+A simple Android app to find the best coffee spots near you. The purpose of this project is to show how to leverage the latest development tools &amp; techniques to successfully create a modern Android app.
 
 The code showcases how to use the following technologies:
 * Kotlin coroutines

@@ -27,7 +27,7 @@ import okhttp3.Response
 import okhttp3.ResponseBody.Companion.toResponseBody
 
 fun createBusinessRepository(): BusinessesRepository {
-    return if (false) {
+    return if (true) {
         BusinessesRepository(YELP_GRAPHQL_URL)
     } else {
         createMockedBusinessRepository()
@@ -173,7 +173,7 @@ private fun createMockedBusinessRepository(): BusinessesRepository {
           "distance": 210,
           "hours": [
             {
-              "is_open_now": false,
+              "is_open_now": true,
               "open": [
                 {
                   "day": 0,
@@ -217,7 +217,7 @@ private fun createMockedBusinessRepository(): BusinessesRepository {
             "address1": "6 Pike St",
             "city": "Seattle"
           },
-          "name": "Cafe Sima",
+          "name": "Cafe Virgo",
           "photos": [
             "https://s3-media0.fl.yelpcdn.com/bphoto/AHdlJUFm-CWCAdB1SYOVfg/o.jpg"
           ],
