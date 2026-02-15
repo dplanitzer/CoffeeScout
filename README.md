@@ -11,7 +11,7 @@ The code showcases how to use the following technologies:
 
 ## Getting Started
 
-Check out the project, open it in Android Studio and build it. Note that you will need a Yelp development key to successfully build and use the app. Create a text file with the name 'keys.properties' and place it inside your checked-out project folder. Then add the single entry 'API_KEY = X' where 'X' is your Yelp development key to the properties file and save it.
+Check out the project first, then open it in Android Studio and build it. Please note that you will need a Yelp API key to successfully build and use the app. Create a text file with the name 'keys.properties' and place it inside your checked-out project folder. Then add the single entry 'API_KEY = X' where 'X' is your Yelp API key to the properties file and save it. Note that the 'keys.properties' file is listed in the .gitignore file and thus the key will not be committed to the repository when you want to commit changes.
 
 ## License
 
