@@ -125,7 +125,7 @@ private fun LandscapeCard(b: Business,
             model = b.heroImageUrl,
             modifier = Modifier
                 .width(400.dp)
-                .height(230.dp)
+                .height(260.dp)
                 .clickable {
                     onAction(BusinessCardAction.GoToDetails, b)
                 },

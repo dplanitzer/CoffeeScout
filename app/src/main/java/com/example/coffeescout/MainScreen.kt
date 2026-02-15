@@ -3,17 +3,18 @@ package com.example.coffeescout
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.text.KeyboardActions
-import androidx.compose.foundation.text.KeyboardOptions
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Search
 import androidx.compose.material3.CircularProgressIndicator
-import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.OutlinedTextField
-import androidx.compose.material3.OutlinedTextFieldDefaults
+import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.Icon
+import androidx.compose.material3.SearchBar
+import androidx.compose.material3.SearchBarDefaults
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -26,7 +27,6 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.paging.LoadState
@@ -35,30 +35,32 @@ import androidx.paging.compose.collectAsLazyPagingItems
 import com.example.coffeescout.repository.Business
 
 @Composable
-fun MainScreen(viewModel: MainViewModel = viewModel(),
-               initialStreetAddress: String,
+fun MainScreen(initialStreetAddress: String,
                businessFormatter: BusinessFormatter,
+               modifier: Modifier = Modifier,
+               viewModel: MainViewModel = viewModel(),
                onAction: BusinessCardActionCallback = { _, _ -> },
                onAddressChange: (String, LazyPagingItems<Business>) -> Unit = { _, _ -> }
 ) {
     val lazyPagingItems = viewModel.businessFlow.collectAsLazyPagingItems()
 
-    Column {
+    Box(modifier = modifier) {
+        LazyBusinessColumn(
+            lazyPagingItems,
+            businessFormatter,
+            onAction
+        )
+
         AddressInputBar(
             initialStreetAddress = initialStreetAddress,
             onAddressChange = { newAddress ->
                 onAddressChange(newAddress, lazyPagingItems)
             }
         )
-
-        LazyBusinessColumn(
-            lazyPagingItems,
-            businessFormatter,
-            onAction
-        )
     }
 }
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun AddressInputBar(
     initialStreetAddress: String,
@@ -66,38 +68,41 @@ fun AddressInputBar(
 ) {
     val focusManager = LocalFocusManager.current
     val keyboardController = LocalSoftwareKeyboardController.current
-    var text by rememberSaveable { mutableStateOf(initialStreetAddress) }
+    var query by rememberSaveable { mutableStateOf(initialStreetAddress) }
 
     Box(
         modifier = Modifier
             .fillMaxWidth()
             .wrapContentHeight()
-            .background(MaterialTheme.colorScheme.surface)
+            .background(Color.Transparent)
     ) {
-        OutlinedTextField(
-            value = text,
-            onValueChange = { newText ->
-                text = newText
+        SearchBar(
+            inputField = {
+                SearchBarDefaults.InputField(
+                    query = query,
+                    onQueryChange = { query = it },
+                    onSearch = {
+                        focusManager.clearFocus()
+                        keyboardController?.hide()
+
+                        onAddressChange(query)
+                    },
+                    expanded = false,
+                    onExpandedChange = { },
+                    placeholder = { Text(stringResource(R.string.address_input_hint)) },
+                    leadingIcon = {
+                            Icon(Icons.Default.Search, contentDescription = "Search Icon")
+                    },
+                    trailingIcon = {},
+                )
             },
+            expanded = false,
+            onExpandedChange = { },
+            content = {},
             modifier = Modifier
                 .fillMaxWidth()
-                .wrapContentHeight(),
-            placeholder = { Text(stringResource(R.string.address_input_hint)) },
-            colors = OutlinedTextFieldDefaults.colors(
-                focusedContainerColor = Color.White,
-                unfocusedContainerColor = MaterialTheme.colorScheme.onSurface,
-                disabledContainerColor = Color.Gray
-            ),
-            singleLine = true,
-            keyboardOptions = KeyboardOptions(imeAction = ImeAction.Go),
-            keyboardActions = KeyboardActions(
-                onGo = {
-                    focusManager.clearFocus()
-                    keyboardController?.hide()
-
-                    onAddressChange(text)
-                }
-            )
+                .wrapContentHeight()
+                .padding(horizontal = 12.dp)
         )
     }
 }
@@ -112,7 +117,7 @@ fun LazyBusinessColumn(
     LazyColumn(
         modifier = modifier,
         verticalArrangement = Arrangement.spacedBy(16.dp),
-        contentPadding = PaddingValues(top = 16.dp, bottom = 16.dp, start = 12.dp, end = 12.dp)
+        contentPadding = PaddingValues(top = 60.dp + 16.dp, bottom = 16.dp, start = 12.dp, end = 12.dp)
     ) {
         items(lazyPagingItems.itemCount) { index ->
             val business = lazyPagingItems[index]

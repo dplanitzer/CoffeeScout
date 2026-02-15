@@ -10,8 +10,8 @@ import android.os.Bundle
 import androidx.activity.viewModels
 import androidx.annotation.RequiresPermission
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.Surface
+import androidx.compose.foundation.layout.padding
+import androidx.compose.material3.Scaffold
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.paging.compose.LazyPagingItems
@@ -72,14 +72,14 @@ class MainActivity : AppCompatActivity() {
 
         setContent {
             AppTheme {
-                Surface(
-                    modifier = Modifier.fillMaxSize(),
-                    color = MaterialTheme.colorScheme.background
-                ) {
+                Scaffold(
+                    modifier = Modifier.fillMaxSize()
+                ) { contentPadding ->
                     MainScreen(
-                        viewModel = viewModel,
+                        modifier = Modifier.padding(contentPadding),
                         initialStreetAddress = stringResource(R.string.nearby_address),
                         businessFormatter = businessFormatter,
+                        viewModel = viewModel,
                         onAction = this::onBusinessCardAction,
                         onAddressChange = this::onAddressChange
                     )
