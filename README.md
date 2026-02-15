@@ -1,6 +1,10 @@
 # CoffeeScout
 A simple Android app to find the best coffee spots near you. The purpose of this project is to show how to leverage the latest development tools &amp; techniques to successfully create a modern Android app.
 
+<p align="center">
+<img width="30%" height="30%" alt="Screenshot_20260215_123046" src="https://github.com/user-attachments/assets/16b1ade4-92bc-4d6f-85c8-0039f5895f73" />
+</p>
+
 The code showcases how to use the following technologies:
 * Kotlin coroutines
 * Jetpack Compose
