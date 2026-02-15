@@ -1,24 +1,4 @@
-// Copyright (c) 2025 - 2026 Dietmar Planitzer <https://www.linkedin.com/in/dplanitzer/>
-//
-// Permission is hereby granted, free of charge, to any person obtaining a copy
-// of this software and associated documentation files (the "Software"), to deal
-// in the Software without restriction, including without limitation the rights
-// to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
-// copies of the Software, and to permit persons to whom the Software is
-// furnished to do so, subject to the following conditions:
-//
-// The above copyright notice and this permission notice shall be included in all
-// copies or substantial portions of the Software.
-//
-// THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-// IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-// FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
-// AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-// LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
-// OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
-// SOFTWARE.
-//
-package com.example.coffeescout
+package com.example.coffeescout.ui
 
 import android.content.res.Configuration
 import androidx.compose.foundation.Image
@@ -57,9 +37,11 @@ import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import coil.compose.AsyncImage
+import com.example.coffeescout.BusinessFormatter
+import com.example.coffeescout.R
+import com.example.coffeescout.ui.YelpRatingBar
 import com.example.coffeescout.repository.Business
 import java.time.DayOfWeek
-
 
 // The actions that a user might trigger by tapping on the various buttons in a card
 enum class BusinessCardAction {
@@ -319,7 +301,13 @@ private fun BusinessCardPreview() {
                 distanceInMeters = 491.0,
                 hours = Business.Hours(
                     isOpenNow = false,
-                    openingTimes = listOf(Business.OpeningTime(DayOfWeek.MONDAY, Business.HoursMinutes(10, 30), Business.HoursMinutes(19, 30)))
+                    openingTimes = listOf(
+                        Business.OpeningTime(
+                            DayOfWeek.MONDAY,
+                            Business.HoursMinutes(10, 30),
+                            Business.HoursMinutes(19, 30)
+                        )
+                    )
                 ),
                 geoLocation = null,
                 reviewsUrl = ""

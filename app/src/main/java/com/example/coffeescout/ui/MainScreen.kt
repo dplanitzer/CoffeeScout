@@ -1,24 +1,4 @@
-// Copyright (c) 2025 - 2026 Dietmar Planitzer <https://www.linkedin.com/in/dplanitzer/>
-//
-// Permission is hereby granted, free of charge, to any person obtaining a copy
-// of this software and associated documentation files (the "Software"), to deal
-// in the Software without restriction, including without limitation the rights
-// to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
-// copies of the Software, and to permit persons to whom the Software is
-// furnished to do so, subject to the following conditions:
-//
-// The above copyright notice and this permission notice shall be included in all
-// copies or substantial portions of the Software.
-//
-// THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-// IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-// FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
-// AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-// LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
-// OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
-// SOFTWARE.
-//
-package com.example.coffeescout
+package com.example.coffeescout.ui
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
@@ -55,6 +35,10 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.paging.LoadState
 import androidx.paging.compose.LazyPagingItems
 import androidx.paging.compose.collectAsLazyPagingItems
+import com.example.coffeescout.BusinessFormatter
+import com.example.coffeescout.ui.ErrorView
+import com.example.coffeescout.MainViewModel
+import com.example.coffeescout.R
 import com.example.coffeescout.repository.Business
 
 @Composable
@@ -121,7 +105,7 @@ fun AddressInputBar(
                     onExpandedChange = { },
                     placeholder = { Text(stringResource(R.string.address_input_hint)) },
                     leadingIcon = {
-                            Icon(Icons.Default.Search, contentDescription = "Search Icon")
+                        Icon(Icons.Default.Search, contentDescription = "Search Icon")
                     },
                     trailingIcon = {},
                 )
@@ -148,7 +132,12 @@ fun LazyBusinessColumn(
     LazyColumn(
         modifier = modifier,
         verticalArrangement = Arrangement.spacedBy(16.dp),
-        contentPadding = PaddingValues(top = 60.dp + 16.dp, bottom = 16.dp, start = 12.dp, end = 12.dp)
+        contentPadding = PaddingValues(
+            top = 60.dp + 16.dp,
+            bottom = 16.dp,
+            start = 12.dp,
+            end = 12.dp
+        )
     ) {
         items(lazyPagingItems.itemCount) { index ->
             val business = lazyPagingItems[index]
@@ -185,8 +174,8 @@ fun LazyBusinessColumn(
                             exception = e.error,
                             onRetry = { lazyPagingItems.retry() },
                             modifier = Modifier
-                                        .fillMaxWidth()
-                                        .fillParentMaxHeight()
+                                .fillMaxWidth()
+                                .fillParentMaxHeight()
                         )
                     }
                 }
