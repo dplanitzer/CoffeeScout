@@ -26,12 +26,13 @@ import android.icu.text.MeasureFormat
 import android.icu.util.Measure
 import android.icu.util.MeasureUnit
 import android.net.Uri
+import androidx.core.net.toUri
 
 
 // Invoke the web browser with the given URL.
 fun Activity.openUrl(url: String): Boolean {
 
-    val intent = Intent(Intent.ACTION_VIEW, Uri.parse(url))
+    val intent = Intent(Intent.ACTION_VIEW, url.toUri())
     return if (intent.resolveActivity(packageManager) != null) {
         startActivity(intent)
         true
@@ -42,7 +43,7 @@ fun Activity.openUrl(url: String): Boolean {
 
 fun Activity.openTurnByTurnNavigationTo(loc: GeoLocation): Boolean {
 
-    val uri = Uri.parse("google.navigation:q=${loc.latitude},${loc.longitude}")
+    val uri = "google.navigation:q=${loc.latitude},${loc.longitude}".toUri()
     val intent = Intent(Intent.ACTION_VIEW, uri)
     intent.setPackage("com.google.android.apps.maps")
 
