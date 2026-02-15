@@ -58,6 +58,16 @@ private fun createMockedBusinessRepository(): BusinessesRepository {
                   "day": 4,
                   "end": "1930",
                   "start": "1030"
+                },
+                {
+                  "day": 5,
+                  "end": "1700",
+                  "start": "1000"
+                },
+                {
+                  "day": 6,
+                  "end": "1600",
+                  "start": "1000"
                 }
               ]
             }
@@ -110,6 +120,16 @@ private fun createMockedBusinessRepository(): BusinessesRepository {
                   "day": 4,
                   "end": "1930",
                   "start": "1030"
+                },
+                {
+                  "day": 5,
+                  "end": "1700",
+                  "start": "1000"
+                },
+                {
+                  "day": 6,
+                  "end": "1600",
+                  "start": "1000"
                 }
               ]
             }
@@ -162,6 +182,16 @@ private fun createMockedBusinessRepository(): BusinessesRepository {
                   "day": 4,
                   "end": "1930",
                   "start": "1030"
+                },
+                {
+                  "day": 5,
+                  "end": "1700",
+                  "start": "1000"
+                },
+                {
+                  "day": 6,
+                  "end": "1600",
+                  "start": "1000"
                 }
               ]
             }
@@ -214,6 +244,16 @@ private fun createMockedBusinessRepository(): BusinessesRepository {
                   "day": 4,
                   "end": "1930",
                   "start": "1030"
+                },
+                {
+                  "day": 5,
+                  "end": "1700",
+                  "start": "1000"
+                },
+                {
+                  "day": 6,
+                  "end": "1600",
+                  "start": "1000"
                 }
               ]
             }
@@ -266,6 +306,16 @@ private fun createMockedBusinessRepository(): BusinessesRepository {
                   "day": 4,
                   "end": "1930",
                   "start": "1030"
+                },
+                {
+                  "day": 5,
+                  "end": "1700",
+                  "start": "1000"
+                },
+                {
+                  "day": 6,
+                  "end": "1600",
+                  "start": "1000"
                 }
               ]
             }
@@ -318,6 +368,16 @@ private fun createMockedBusinessRepository(): BusinessesRepository {
                   "day": 4,
                   "end": "1930",
                   "start": "1030"
+                },
+                {
+                  "day": 5,
+                  "end": "1700",
+                  "start": "1000"
+                },
+                {
+                  "day": 6,
+                  "end": "1600",
+                  "start": "1000"
                 }
               ]
             }

@@ -60,13 +60,7 @@ data class Business(
     constructor(b: GetBusinessesQuery.Business) : this(
         b.id,
         b.name ?: "",
-        if (!b.location?.address1.isNullOrEmpty() && !b.location.city.isNullOrEmpty()) {
-            b.location.address1 + ", " + b.location.city
-        } else if (b.location?.address1 != null) {
-            b.location.address1
-        } else {
-            b.location!!.city!!
-        },
+        b.location?.address1 ?: "",
         b.photos?.firstOrNull() ?: "",
         b.url ?: "",
         b.price ?: "",

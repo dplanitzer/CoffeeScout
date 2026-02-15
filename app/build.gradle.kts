@@ -69,13 +69,14 @@ java {
 dependencies {
     val lifecycleVersion = "2.10.0"
 
-    val composeBom = platform("androidx.compose:compose-bom:2025.12.00")
+    val composeBom = platform("androidx.compose:compose-bom:2026.01.01")
     implementation(composeBom)
 
     implementation("androidx.compose.ui:ui-android")
     implementation("androidx.compose.ui:ui-tooling")
     debugImplementation("androidx.compose.ui:ui-tooling-preview")
     implementation("androidx.compose.material3:material3")
+    implementation("androidx.compose.material:material-icons-extended:1.7.8")
     implementation("androidx.compose.runtime:runtime")
     implementation("androidx.compose.foundation:foundation")
     implementation("androidx.paging:paging-compose")

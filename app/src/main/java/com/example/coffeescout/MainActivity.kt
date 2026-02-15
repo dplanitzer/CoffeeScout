@@ -19,6 +19,7 @@ import com.example.coffeescout.repository.Business
 import com.example.coffeescout.repository.BusinessAddress
 import com.example.coffeescout.repository.BusinessesRepository
 import com.example.coffeescout.repository.createBusinessRepository
+import com.example.coffeescout.ui.theme.AppTheme
 import com.google.android.gms.location.FusedLocationProviderClient
 import com.google.android.gms.location.LocationServices
 import com.google.android.gms.tasks.Tasks.await
@@ -70,7 +71,7 @@ class MainActivity : AppCompatActivity() {
 
 
         setContent {
-            MaterialTheme {
+            AppTheme {
                 Surface(
                     modifier = Modifier.fillMaxSize(),
                     color = MaterialTheme.colorScheme.background

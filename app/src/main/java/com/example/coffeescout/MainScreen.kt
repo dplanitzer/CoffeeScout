@@ -1,16 +1,17 @@
 package com.example.coffeescout
 
-import android.util.Log
 import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material3.CircularProgressIndicator
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.OutlinedTextFieldDefaults
 import androidx.compose.material3.Text
@@ -24,7 +25,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.platform.LocalSoftwareKeyboardController
-import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.unit.dp
@@ -53,7 +53,6 @@ fun MainScreen(viewModel: MainViewModel = viewModel(),
 
         LazyBusinessColumn(
             lazyPagingItems,
-            modifier = Modifier.padding(top = 16.dp),
             businessFormatter,
             onAction
         )
@@ -73,7 +72,7 @@ fun AddressInputBar(
         modifier = Modifier
             .fillMaxWidth()
             .wrapContentHeight()
-            .background(colorResource(R.color.purple_500))
+            .background(MaterialTheme.colorScheme.surface)
     ) {
         OutlinedTextField(
             value = text,
@@ -86,7 +85,7 @@ fun AddressInputBar(
             placeholder = { Text(stringResource(R.string.address_input_hint)) },
             colors = OutlinedTextFieldDefaults.colors(
                 focusedContainerColor = Color.White,
-                unfocusedContainerColor = colorResource(R.color.purple_200),
+                unfocusedContainerColor = MaterialTheme.colorScheme.onSurface,
                 disabledContainerColor = Color.Gray
             ),
             singleLine = true,
@@ -106,12 +105,14 @@ fun AddressInputBar(
 @Composable
 fun LazyBusinessColumn(
     lazyPagingItems: LazyPagingItems<Business>,
-    modifier: Modifier = Modifier,
     businessFormatter: BusinessFormatter,
-    onAction: BusinessCardActionCallback
-) {
+    onAction: BusinessCardActionCallback,
+    modifier: Modifier = Modifier
+    ) {
     LazyColumn(
-        modifier = modifier
+        modifier = modifier,
+        verticalArrangement = Arrangement.spacedBy(16.dp),
+        contentPadding = PaddingValues(top = 16.dp, bottom = 16.dp, start = 12.dp, end = 12.dp)
     ) {
         items(lazyPagingItems.itemCount) { index ->
             val business = lazyPagingItems[index]
