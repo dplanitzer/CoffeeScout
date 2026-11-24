@@ -17,7 +17,7 @@ if (localPropsFile.exists() && localPropsFile.isFile) {
 
 android {
     namespace = "com.example.coffeescout"
-    compileSdk = 36
+    compileSdk = 37
 
     defaultConfig {
         applicationId = "com.example.coffeescout"
@@ -66,7 +66,7 @@ java {
 }
 
 dependencies {
-    val lifecycleVersion = "2.10.0"
+    val lifecycleVersion = "2.11.1"
 
     val composeBom = platform("androidx.compose:compose-bom:2026.01.01")
     implementation(composeBom)
@@ -81,18 +81,18 @@ dependencies {
     implementation("androidx.paging:paging-compose")
 
     implementation("io.coil-kt:coil-compose:2.7.0")
-    implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:1.11.0")
+    implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:1.13.0")
     implementation("androidx.activity:activity-compose:1.13.0")
     implementation("androidx.lifecycle:lifecycle-viewmodel-compose:$lifecycleVersion")
     implementation("androidx.lifecycle:lifecycle-viewmodel-ktx:$lifecycleVersion")
     implementation("androidx.lifecycle:lifecycle-runtime-ktx:$lifecycleVersion")
-    implementation("androidx.paging:paging-runtime:3.5.0")
-    implementation("androidx.core:core-ktx:1.18.0")
-    implementation("androidx.appcompat:appcompat:1.7.1")
-    implementation("com.squareup.okhttp3:okhttp:5.3.2")
-    implementation("com.apollographql.apollo:apollo-runtime:4.4.1")
+    implementation("androidx.paging:paging-runtime:3.5.3")
+    implementation("androidx.core:core-ktx:1.19.1")
+    implementation("androidx.appcompat:appcompat:1.8.0")
+    implementation("com.squareup.okhttp3:okhttp:5.5.1")
+    implementation("com.apollographql.apollo:apollo-runtime:5.2.0")
     implementation("com.google.android.material:material:1.14.0")
-    implementation("com.google.android.gms:play-services-location:21.3.0")
+    implementation("com.google.android.gms:play-services-location:21.4.0")
     implementation("com.google.android.gms:play-services-tasks:18.4.1")
 
     testImplementation("junit:junit:4.13.2")
