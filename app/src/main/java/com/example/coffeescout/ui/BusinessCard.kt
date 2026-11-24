@@ -39,7 +39,6 @@ import androidx.compose.ui.unit.dp
 import coil.compose.AsyncImage
 import com.example.coffeescout.BusinessFormatter
 import com.example.coffeescout.R
-import com.example.coffeescout.ui.YelpRatingBar
 import com.example.coffeescout.repository.Business
 import java.time.DayOfWeek
 

@@ -145,7 +145,7 @@ class MainActivity : AppCompatActivity() {
         val addr = newAddress.trim()
 
         return if (getString(R.string.nearby_address).equals(addr, ignoreCase = true)) {
-            val (granted, denied) = requestMultiplePermissions.request(locationPermissions)
+            val (granted, _) = requestMultiplePermissions.request(locationPermissions)
 
             if (!granted.contains(Manifest.permission.ACCESS_FINE_LOCATION)
                 && !granted.contains(Manifest.permission.ACCESS_COARSE_LOCATION)) {

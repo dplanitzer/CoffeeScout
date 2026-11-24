@@ -54,7 +54,7 @@ private val starsHalf = listOf(
 )
 
 
-@Preview()
+@Preview
 @Composable
 private fun YelpRatingBarPreview() {
     MaterialTheme {

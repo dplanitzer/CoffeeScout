@@ -90,7 +90,7 @@ dependencies {
     implementation("androidx.core:core-ktx:1.19.1")
     implementation("androidx.appcompat:appcompat:1.8.0")
     implementation("com.squareup.okhttp3:okhttp:5.5.1")
-    implementation("com.apollographql.apollo:apollo-runtime:5.2.0")
+    implementation("com.apollographql.apollo:apollo-runtime:4.4.1")
     implementation("com.google.android.material:material:1.14.0")
     implementation("com.google.android.gms:play-services-location:21.4.0")
     implementation("com.google.android.gms:play-services-tasks:18.4.1")

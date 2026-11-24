@@ -36,7 +36,6 @@ import androidx.paging.LoadState
 import androidx.paging.compose.LazyPagingItems
 import androidx.paging.compose.collectAsLazyPagingItems
 import com.example.coffeescout.BusinessFormatter
-import com.example.coffeescout.ui.ErrorView
 import com.example.coffeescout.MainViewModel
 import com.example.coffeescout.R
 import com.example.coffeescout.repository.Business
